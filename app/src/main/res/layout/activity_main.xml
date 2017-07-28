@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/downloadButton"
-        android:layout_width="368dp"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
         android:text="Download"
         tools:layout_editor_absoluteX="8dp"
