@@ -13,4 +13,11 @@
         android:text="Download"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="447dp" />
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:text="Play"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="399dp" />
 </android.support.constraint.ConstraintLayout>
