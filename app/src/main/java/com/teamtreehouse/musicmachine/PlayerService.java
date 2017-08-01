@@ -1,10 +1,12 @@
 package com.teamtreehouse.musicmachine;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Messenger;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -18,7 +20,7 @@ import android.util.Log;
 public class PlayerService extends Service{
     private static final String TAG = PlayerService.class.getSimpleName();
     private MediaPlayer mPlayer;
-    private IBinder mBinder = new LocalBinder();
+    public Messenger mMessenger = new Messenger(new PlayerHandler(this));
 
     @Override
     public void onCreate() {
@@ -26,12 +28,20 @@ public class PlayerService extends Service{
         mPlayer = MediaPlayer.create(this, R.raw.jingle);
     }
 
+
+
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
+        Notification.Builder notificationBuilder = new Notification.Builder(this);
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        Notification notification = notificationBuilder.build();
+        startForeground(11, notification);
+
         mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 stopSelf();
+                stopForeground(true);
             }
         });
         return Service.START_NOT_STICKY;
@@ -41,7 +51,7 @@ public class PlayerService extends Service{
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG,"onBind");
-        return mBinder;
+        return mMessenger.getBinder();
     }
 
     @Override
@@ -56,11 +66,7 @@ public class PlayerService extends Service{
         mPlayer.release();
     }
 
-    public class LocalBinder extends Binder{
-        public PlayerService getService(){
-            return PlayerService.this;
-        }
-    }
+
 
     //Client Methods
     public boolean isPlaying(){
